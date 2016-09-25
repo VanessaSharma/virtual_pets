@@ -15,12 +15,13 @@ public class Person {
   public String getName() {
     return name;
   }
+
   public String getEmail() {
     return email;
   }
 
   public int getId() {
-  return id;
+    return id;
   }
 
   @Override
@@ -30,9 +31,9 @@ public class Person {
     } else {
       Person newPerson = (Person) otherPerson;
       return this.getName().equals(newPerson.getName()) &&
-           this.getEmail().equals(newPerson.getEmail());
+             this.getEmail().equals(newPerson.getEmail());
+    }
   }
-}
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
@@ -42,24 +43,23 @@ public class Person {
         .addParameter("email", this.email)
         .executeUpdate()
         .getKey();
+    }
   }
-}
 
   public static List<Person> all() {
     String sql = "SELECT id, name, email FROM persons";
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery(sql).executeAndFetch(Person.class);
+     return con.createQuery(sql).executeAndFetch(Person.class);
+    }
   }
-}
-  public static Person find(int id) {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM persons where id=:id";
-      Person person = con.createQuery(sql)
-        .addParameter("id", id)
-        .executeAndFetchFirst(Person.class);
-      return person;
-   }
- }
 
+  public List<Monster> getMonsters() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM monsters where personId=:id";
+      return con.createQuery(sql)
+        .addParameter("id", this.id)
+        .executeAndFetch(Monster.class);
+    }
+  }
 
 }
